@@ -67,12 +67,12 @@ async function sendEmails(assignments) {
     const mailOptions = {
       from: 'dedamraz26122024@gmail.com',
       to: giver.email,
-      subject: 'Your Secret Santa Assignment',
+      subject: 'Secret Santa 2025.',
       text: `Bok ${giver.name},
 
 Tvoj trošitelj novaca je ${recipient.name}! 
 
-Happy Holidays!`,
+Sretan Božić!`,
     };
 
     await transporter.sendMail(mailOptions);
