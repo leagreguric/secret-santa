@@ -1,15 +1,14 @@
-# Node.js
+
 node_modules/
 .env
 
-# Logovi
+
 logs/
 *.log
 
-# Build folderi
 dist/
 build/
 
-# Operativni sistem specifični fajlovi
+
 .DS_Store
 Thumbs.db

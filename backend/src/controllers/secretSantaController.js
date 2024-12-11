@@ -1,7 +1,7 @@
 // secretSantaController.js
 import knex from '../../db/knex.js';
 import nodemailer from 'nodemailer';
-
+import dotenv from 'dotenv';
 
 
 // Helper function to shuffle an array
@@ -55,8 +55,8 @@ async function sendEmails(assignments) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'dedamraz26122024@gmail.com',
-      pass: 'agci jazj gozb ysfg',
+      user: process.env.USER,
+      pass: process.env.PASS,
     },
   });
 
