@@ -68,11 +68,31 @@ async function sendEmails(assignments) {
       from: 'dedamraz26122024@gmail.com',
       to: giver.email,
       subject: 'Secret Santa 2025.',
-      text: `Bok ${giver.name},
+      html: `
+    <div>
+      <h1 style="font-family: Arial, sans-serif; color: #333;">Your Secret Santa Reveal</h1>
+      <p style="font-family: Arial, sans-serif; color: #333;">Click the link below to reveal your Secret Santa name:</p>
 
-Tvoj trošitelj novaca je ${recipient.name}! 
+      <!-- Hidden radio button -->
+      <input type="radio" id="reveal" name="reveal" style="display:none;">
+      
+      <!-- Label that acts as a clickable link -->
+      <label for="reveal" style="cursor: pointer; color: blue; text-decoration: underline; font-family: Arial, sans-serif;">Click to reveal</label>
 
-Sretan Božić!`,
+      <!-- Hidden content that is revealed when the radio button is checked -->
+      <div style="margin-top: 10px;">
+        <p style="font-family: Arial, sans-serif; color: transparent; display: none;" id="name">Ferimir</p>
+      </div>
+
+      <!-- Inline CSS to reveal the name when the radio button is checked -->
+      <style>
+        input[type="radio"]:checked + label + div #name {
+          color: black; /* Reveals the name in black when checked */
+          display: block; /* Make it visible */
+        }
+      </style>
+    </div>
+  `
     };
 
     await transporter.sendMail(mailOptions);
@@ -84,14 +104,6 @@ async function handleSecretSanta(req, res) {
   try {
     const assignments = await assignSecretSanta();
 
-    // Save assignments in the database
-    for (const [giverId, recipientId] of assignments) {
-      await knex('people').where('id', giverId).update({
-        previous_recipient_id: recipientId,
-      });
-    }
-
-    
 
     // Send emails
     await sendEmails(assignments);
