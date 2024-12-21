@@ -2,7 +2,8 @@
 import knex from '../../db/knex.js';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
-
+import fs from 'fs';
+import handlebars from 'handlebars';
 
 // Helper function to shuffle an array
 function shuffle(array) {
@@ -60,42 +61,36 @@ async function sendEmails(assignments) {
     },
   });
 
+  const source = fs.readFileSync('C:\\Users\\leale\\Desktop\\secret-santa-app\\backend\\src\\controllers\\secret_santa.html', 'utf-8');
+  const template = handlebars.compile(source);
   for (const [giverId, recipientId] of assignments) {
     const giver = await knex('people').where('id', giverId).first();
     const recipient = await knex('people').where('id', recipientId).first();
 
-    const mailOptions = {
-      from: 'dedamraz26122024@gmail.com',
-      to: giver.email,
-      subject: 'Secret Santa 2025.',
-      html: `
-    <div>
-      <h1 style="font-family: Arial, sans-serif; color: #333;">Your Secret Santa Reveal</h1>
-      <p style="font-family: Arial, sans-serif; color: #333;">Click the link below to reveal your Secret Santa name:</p>
-
-      <!-- Hidden radio button -->
-      <input type="radio" id="reveal" name="reveal" style="display:none;">
-      
-      <!-- Label that acts as a clickable link -->
-      <label for="reveal" style="cursor: pointer; color: blue; text-decoration: underline; font-family: Arial, sans-serif;">Click to reveal</label>
-
-      <!-- Hidden content that is revealed when the radio button is checked -->
-      <div style="margin-top: 10px;">
-        <p style="font-family: Arial, sans-serif; color: transparent; display: none;" id="name">Ferimir</p>
-      </div>
-
-      <!-- Inline CSS to reveal the name when the radio button is checked -->
-      <style>
-        input[type="radio"]:checked + label + div #name {
-          color: black; /* Reveals the name in black when checked */
-          display: block; /* Make it visible */
-        }
-      </style>
-    </div>
-  `
+    const replacements = {
+      name: recipient.name,
+      interests: recipient.interests
     };
 
-    await transporter.sendMail(mailOptions);
+    const htmlToSend = template(replacements);
+
+    let message = {
+      from: 'dedamraz26122024@gmail.com',
+      to: giver.email,
+      subject: 'Secret-Santa 2025',       
+      text: 'Tvoj Secret-Santa zadatak', 
+      html: htmlToSend,                   
+  };
+
+    await transporter.sendMail(message, (error, info) => {
+      if (error) {
+          console.error('Error sending email:', error);
+      } else {
+          console.log('Email sent successfully!');
+          console.log('Message ID:', info.messageId);
+      }
+  });
+  
   }
 }
 

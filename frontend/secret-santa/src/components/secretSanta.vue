@@ -21,6 +21,7 @@
         <p class="name">Hrvoje</p>
         <p class="name">Frano</p>
         <p class="name">Rocco</p>
+        <p class="name">Luka</p>
       </div>
       
       <div class="names-right-side">
@@ -32,6 +33,7 @@
         <p class="name">Bruno</p>
         <p class="name">Petra</p>
         <p class="name">David</p>
+        <p class="name">Tena</p>
       </div>
     </div>
     <button class="assign" @click="assignSecretSanta">Dodijeli parove</button>
@@ -144,7 +146,7 @@ video {
   font-weight: 400;
   font-style: normal;
   color: rgb(255, 255, 179);
-  font-size: 53px;
+  font-size: 47px;
   padding: 0px;
   line-height: 16px;
   font-weight: bold;
@@ -158,8 +160,8 @@ video {
   flex-direction: row;
   gap: 55px;
   position: absolute;
-  left: 165px;
-  top: 440px;
+  left: 185px;
+  top: 435px;
   
 }
 
