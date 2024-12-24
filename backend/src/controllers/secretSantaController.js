@@ -1,11 +1,11 @@
-// secretSantaController.js
+
 import knex from '../../db/knex.js';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import handlebars from 'handlebars';
 
-// Helper function to shuffle an array
+
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -14,7 +14,6 @@ function shuffle(array) {
   return array;
 }
 
-// Function to assign Secret Santa pairs
 async function assignSecretSanta() {
   const participants = await knex('people').select('*');
 
@@ -26,7 +25,8 @@ async function assignSecretSanta() {
       (id) =>
         id !== giver.id &&
         participants.find((p) => p.id === id).family !== giver.family &&
-        id !== giver.previous_recipient_id
+        id !== giver.previous_recipient_id &&
+        id !== giver.partner_id 
     );
 
     if (availableRecipients.length === 0) {
@@ -42,7 +42,7 @@ async function assignSecretSanta() {
       recipients.splice(index, 1);
     }
 
-    // Log dodeljeni par
+
     const recipient = participants.find((p) => p.id === recipientId);
     console.log(`🎅 ${giver.name} -> ${recipient.name}`);
   }
@@ -50,8 +50,6 @@ async function assignSecretSanta() {
   return assignments;
 }
 
-
-// Function to send emails
 async function sendEmails(assignments) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -94,13 +92,10 @@ async function sendEmails(assignments) {
   }
 }
 
-// Main controller function
+
 async function handleSecretSanta(req, res) {
   try {
     const assignments = await assignSecretSanta();
-
-
-    // Send emails
     await sendEmails(assignments);
 
     
