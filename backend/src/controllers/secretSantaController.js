@@ -105,10 +105,10 @@ async function handleSecretSanta(req, res) {
 
     
 
-    res.status(200).send('Secret Santa assignments completed and emails sent!');
+    res.status(200).send('Parovi su dodijeljeni! Provjerite svoj mail🎄📬');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error during Secret Santa assignment.');
+    res.status(500).send('Dogodila se greška, izvadite papiriće.🧻😒 (backend)');
   }
 
   
